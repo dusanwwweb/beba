@@ -74,6 +74,7 @@ public class Child {
 
     /*
     //BIDIRECTIONAL
+    //ManyToOne on the child side & OnToMany on the parent side
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idSection", nullable = false)
     private Section section;

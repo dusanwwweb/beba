@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Entity
@@ -43,6 +44,7 @@ public abstract class User {
     private String email;
 
     //The annotated element must not be null and must contain at least one non-whitespace character.
+    @Size(min = 6, max = 20)
     @NotBlank(message = "Password is required")
     private String password;
 

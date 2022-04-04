@@ -19,7 +19,8 @@ import java.util.Set;
 
 @Entity
 @DiscriminatorValue("employee")
-public class Employee extends User{
+public class
+Employee extends User{
 
     @Enumerated(EnumType.STRING)
     private EmployeeRole employeeRole;
