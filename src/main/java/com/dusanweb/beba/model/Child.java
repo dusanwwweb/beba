@@ -20,17 +20,17 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class Child {
 
     @Id
     @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idChild;
+    private Long id;
 
     @NotBlank(message = "Name is required")
     private String firstName;
@@ -72,32 +72,30 @@ public class Child {
     @ManyToMany(mappedBy = "children")
     private Set<Parent> parents = new HashSet<>();
 
-    /*
     //BIDIRECTIONAL
     //ManyToOne on the child side & OnToMany on the parent side
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idSection", nullable = false)
+    @JoinColumn(name = "section_id", nullable = false)
     private Section section;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idNotebook", nullable = false)
+    @JoinColumn(name = "notebook_id", nullable = false)
     private Notebook notebook;
 
-     */
 
+    /*
     //UNIDIRECTIONAL
-    // the best way to model a one-to-many relationship is to use just
-    // @ManyToOne annotation on the child entity.
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "idSection", nullable = false)
+    @JoinColumn(name = "section_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Section section;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "idNotebook", nullable = false)
+    @JoinColumn(name = "notebook_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Notebook notebook;
+
+     */
 }

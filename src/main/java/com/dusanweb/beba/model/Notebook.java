@@ -14,17 +14,17 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class Notebook {
 
     @Id
     @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idNotebook;
+    private Long id;
 
     @Enumerated(EnumType.STRING)
     private ActivityType activityType;
@@ -54,11 +54,11 @@ public class Notebook {
     // @OneToMany annotation on the parent side of the relationship and a
     // @ManyToOne annotation on the child side of the relationship.
 
-    /*
+
      //BIDIRECTIONAL
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "notebook")
     private Set<Child> childSet = new HashSet<>();
 
-     */
+
 
 }

@@ -9,18 +9,20 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.Set;
 
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class Section {
 
     @Id
     @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idSection;
+    private Long id;
 
     @NotBlank(message = "Name is required")
     private String name;
@@ -32,7 +34,7 @@ public class Section {
         JPA RELATIONSHIPS
      */
 
-    /*
+
     //BIDIRECTIONAL
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "section")
     private Set<Child> childSet = new HashSet<>();
@@ -40,5 +42,5 @@ public class Section {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "section")
     private Set<Employee> employeeSet = new HashSet<>();
 
-     */
+
 }

@@ -1,5 +1,6 @@
 package com.dusanweb.beba.model;
 
+import com.dusanweb.beba.enumeration.RoleType;
 import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -9,22 +10,25 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@Entity
+//@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 /*
     L’inconvénient de la stratégie SINGLE_TABLE est qu’il n’est pas possible
     d’ajouter des contraintes de type NOT NULL sur les colonnes représentant
     les propriétés des classes filles.
  */
-//@Inheritance(strategy=InheritanceType.JOINED)
+@Inheritance(strategy=InheritanceType.JOINED)
 //@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
 @DiscriminatorColumn(name="user_type", discriminatorType = DiscriminatorType.STRING)
-public abstract class User {
+public class User {
+//public abstract class User { //commented because can not instantiate the abstract user class (in AuthService)
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
@@ -48,12 +52,22 @@ public abstract class User {
     @NotBlank(message = "Password is required")
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    private RoleType roleType;
+
     @UpdateTimestamp
     private LocalDateTime updated;
 
     /*
-        The user is enabled after completing the email verification process
-        --> VerificationToken
-     */
-    private boolean enabled;
+        JPA RELATIONSHIPS
+    */
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 }

@@ -13,7 +13,6 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
 @Entity
 @DiscriminatorValue("parent")
 public class Parent extends User{
@@ -25,15 +24,16 @@ public class Parent extends User{
     private String city;
 
     /*
-        JPA RELATIONSHIPS
+    JPA RELATIONSHIPS
      */
-    @ManyToMany(cascade = {
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE
     })
     @JoinTable(name = "child_parent",
-            joinColumns = @JoinColumn(name = "idParent"), //TODO inheritance ???
-            inverseJoinColumns = @JoinColumn(name = "idChild")
+            joinColumns = @JoinColumn(name = "parent_id"),
+            inverseJoinColumns = @JoinColumn(name = "child_id")
     )
     private Set<Child> children = new HashSet<>();
 

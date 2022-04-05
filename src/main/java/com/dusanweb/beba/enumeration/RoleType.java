@@ -1,12 +1,13 @@
 package com.dusanweb.beba.enumeration;
 
-public enum EmployeeRole {
+public enum RoleType {
+    USER("Parent"),
     ADMIN("Administrateur"),
     ASSISTANT("Auxiliaire de crèche");
 
     private final String role;
 
-    private EmployeeRole(String role) {
+    private RoleType(String role) {
         this.role = role;
     }
 
