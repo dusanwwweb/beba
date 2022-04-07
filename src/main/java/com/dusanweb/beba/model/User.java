@@ -9,7 +9,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -56,7 +56,7 @@ public class User {
     private RoleType roleType;
 
     @UpdateTimestamp
-    private LocalDateTime updated;
+    private LocalDate updated;
 
     /*
         JPA RELATIONSHIPS

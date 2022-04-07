@@ -1,21 +1,15 @@
 package com.dusanweb.beba.model;
 
 import com.dusanweb.beba.enumeration.AllergyType;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import javax.validation.constraints.NotBlank;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -64,7 +58,7 @@ public class Child {
     private byte[] profilePhoto;
 
     @UpdateTimestamp
-    private LocalDateTime updated;
+    private LocalDate updated;
 
     /*
         JPA RELATIONSHIPS
