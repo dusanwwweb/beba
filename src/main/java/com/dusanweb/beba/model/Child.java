@@ -44,7 +44,7 @@ public class Child {
     @NotBlank(message = "City is required")
     private String city;
 
-    //@JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern="dd/MM/yyyy")
     @NotBlank(message = "Date of birth is required")
     private LocalDate dateOfBirth;
 
@@ -64,7 +64,8 @@ public class Child {
     private byte[] profilePhoto;
 
     @UpdateTimestamp
-    private LocalDateTime updated;
+    @JsonFormat(pattern="dd/MM/yyyy")
+    private LocalDate updated;
 
     /*
         JPA RELATIONSHIPS
