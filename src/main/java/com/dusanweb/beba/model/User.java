@@ -1,6 +1,7 @@
 package com.dusanweb.beba.model;
 
 import com.dusanweb.beba.enumeration.RoleType;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -10,6 +11,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,14 +21,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-//@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-/*
-    L’inconvénient de la stratégie SINGLE_TABLE est qu’il n’est pas possible
-    d’ajouter des contraintes de type NOT NULL sur les colonnes représentant
-    les propriétés des classes filles.
- */
 @Inheritance(strategy=InheritanceType.JOINED)
-//@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
 @DiscriminatorColumn(name="user_type", discriminatorType = DiscriminatorType.STRING)
 public class User {
 //public abstract class User { //commented because can not instantiate the abstract user class (in AuthService)
@@ -52,22 +48,26 @@ public class User {
     @NotBlank(message = "Password is required")
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private RoleType roleType;
-
     @UpdateTimestamp
+    @JsonFormat(pattern="dd/MM/yyyy")
     private LocalDate updated;
 
     /*
         JPA RELATIONSHIPS
     */
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
+    /*
+     User class has a Set of Roles but the Role class doesn’t have any references of User.
+     And by default, no cascade operations on a @ManyToMany relationship – that means updating
+     a User object won’t change the associated Role objects.
+     */
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    //This method adds role to the user
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
 }
