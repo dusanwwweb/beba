@@ -1,18 +1,13 @@
 package com.dusanweb.beba.model;
 
-import com.dusanweb.beba.enumeration.RoleType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,6 +18,8 @@ import java.util.Set;
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
 @DiscriminatorColumn(name="user_type", discriminatorType = DiscriminatorType.STRING)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+//The UNIQUE constraint ensures that all values in a column are different.
 public class User {
 //public abstract class User { //commented because can not instantiate the abstract user class (in AuthService)
     @Id
@@ -51,6 +48,8 @@ public class User {
     @UpdateTimestamp
     @JsonFormat(pattern="dd/MM/yyyy")
     private LocalDate updated;
+
+    private Boolean enabled;
 
     /*
         JPA RELATIONSHIPS

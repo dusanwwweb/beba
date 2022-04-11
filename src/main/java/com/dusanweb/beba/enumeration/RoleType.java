@@ -1,9 +1,9 @@
 package com.dusanweb.beba.enumeration;
 
 public enum RoleType {
-    USER("Parent"),
-    ADMIN("Administrateur"),
-    ASSISTANT("Auxiliaire de crèche");
+    ROLE_USER("Parent"),
+    ROLE_ADMIN("Administrateur"),
+    ROLE_ASSISTANT("Auxiliaire de crèche");
 
     private final String role;
 

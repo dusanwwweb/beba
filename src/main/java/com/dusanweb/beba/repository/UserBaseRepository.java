@@ -8,9 +8,5 @@ import java.util.Optional;
 
 @NoRepositoryBean
 public interface UserBaseRepository<T extends User> extends JpaRepository<T, Long> {
-
-    public T findByEmail(String email);
-
-    @Override
-    Optional<T> findById(Long id);
+    Optional<T> findByEmail(String email);
 }

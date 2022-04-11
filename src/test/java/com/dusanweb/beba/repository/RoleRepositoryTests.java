@@ -24,9 +24,9 @@ public class RoleRepositoryTests {
     @Test
     @DisplayName("Test case for persisting roles into the database")
     public void testCreateRoles() {
-        Role user = new Role(RoleType.USER);
-        Role admin = new Role(RoleType.ADMIN);
-        Role assistant = new Role(RoleType.ASSISTANT);
+        Role user = new Role(RoleType.ROLE_USER);
+        Role admin = new Role(RoleType.ROLE_ADMIN);
+        Role assistant = new Role(RoleType.ROLE_ASSISTANT);
 
         roleRepository.saveAll(List.of(user, admin, assistant));
 
