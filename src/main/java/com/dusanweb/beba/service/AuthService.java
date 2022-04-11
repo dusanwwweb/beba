@@ -22,8 +22,6 @@ public class AuthService {
     private PasswordEncoder passwordEncoder;
 
     public void signup(RegisterRequest registerRequest) {
-
-
         User user = new User();
         user.setFirstName(registerRequest.getFirstName());
         user.setLastName(registerRequest.getLastName());
@@ -32,8 +30,6 @@ public class AuthService {
 
         userRepository.save(user);
         log.info("User saved : " + user);
-
-
 
 /*
         Parent parent = new Parent();

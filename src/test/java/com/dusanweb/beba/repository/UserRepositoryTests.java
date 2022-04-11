@@ -14,6 +14,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 
 @DataJpaTest
@@ -30,17 +33,21 @@ public class UserRepositoryTests {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     @Test
     @Order(1)
     @DisplayName("Test case for persisting a new user into the database")
     public void testCreateUser() {
         User user = new User();
         user.setEmail("patrick@gmail.com");
-        user.setPassword("pass123");
+        user.setPassword(passwordEncoder().encode("pass"));
         user.setFirstName("Patrick");
         user.setLastName("Duclos");
 
-        //TODO User persisted par default as "user" from user_type @DiscriminatorColumn(name="user_type", discriminatorType = DiscriminatorType.STRING)
         User savedUser = userRepository.save(user);
         User existUser = entityManager.find(User.class, savedUser.getId());
 
@@ -51,13 +58,13 @@ public class UserRepositoryTests {
     @Order(2)
     @DisplayName("Test case for persisting a new user with Admin role")
     public void testAddRoleToNewUser() {
-        Role roleAdmin = roleRepository.findByName(RoleType.ADMIN);
+        Role roleAdmin = roleRepository.findByName(RoleType.ROLE_ADMIN);
 
         User user = new User();
         user.setEmail("michel@gmail.com");
-        user.setPassword("mike123");
+        user.setPassword(passwordEncoder().encode("pass"));
         user.setFirstName("Michel");
-        user.setLastName("Gates");
+        user.setLastName("Drucker");
         user.addRole(roleAdmin);
 
         User savedUser = userRepository.save(user);
@@ -70,8 +77,8 @@ public class UserRepositoryTests {
     @DisplayName("Test case for updating an existing user by adding two roles")
     public void testAddRoleToExistingUser() {
         User user = userRepository.findById(1L).get();
-        Role roleUser = roleRepository.findByName(RoleType.USER);
-        Role roleAssistant = roleRepository.findByName(RoleType.ASSISTANT);
+        Role roleUser = roleRepository.findByName(RoleType.ROLE_USER);
+        Role roleAssistant = roleRepository.findByName(RoleType.ROLE_ASSISTANT);
 
         user.addRole(roleUser);
         user.addRole(roleAssistant);

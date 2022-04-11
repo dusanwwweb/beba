@@ -2,20 +2,13 @@ package com.dusanweb.beba.model;
 
 import com.dusanweb.beba.enumeration.AllergyType;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.validation.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,6 +17,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 public class Child {
 
@@ -60,8 +54,9 @@ public class Child {
     Since we're going to save byte array, we're using BLOB.
      */
     @Lob
-    @Column(name = "profilePhoto", columnDefinition="BLOB")
+    @Column(name = "profilePhoto", columnDefinition="BLOB", length=1000)
     private byte[] profilePhoto;
+    //https://i.postimg.cc/k4nN81BW/newborn.jpg
 
     @UpdateTimestamp
     @JsonFormat(pattern="dd/MM/yyyy")
@@ -70,8 +65,6 @@ public class Child {
     /*
         JPA RELATIONSHIPS
      */
-    @ManyToMany(mappedBy = "children")
-    private Set<Parent> parents = new HashSet<>();
 
     //BIDIRECTIONAL
     //ManyToOne on the child side & OnToMany on the parent side
@@ -99,4 +92,28 @@ public class Child {
     private Notebook notebook;
 
      */
+
+    /*
+    @ManyToMany(mappedBy = "children")
+    private Set<Parent> parents = new HashSet<>();
+
+     User class has a Set of Roles but the Role class doesn’t have any references of User.
+     And by default, no cascade operations on a @ManyToMany relationship – that means updating
+     a User object won’t change the associated Role objects.
+
+     */
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "child_parent",
+            joinColumns = @JoinColumn(name = "child_id"),
+            inverseJoinColumns = @JoinColumn(name = "parent_id")
+    )
+    private Set<Parent> parents = new HashSet<>();
+
+  //  public Child(String firstName, String lastName, String address, String city, LocalDate dateOfBirth, Float weight, AllergyType allergyType, byte[] profilePhoto, Notebook notebook, Section section) {
+   // }
+
+    //This method adds parent to the child
+    public void addParent(Parent parent) {
+        this.parents.add(parent);
+    }
 }

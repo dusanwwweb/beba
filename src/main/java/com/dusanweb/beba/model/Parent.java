@@ -26,15 +26,14 @@ public class Parent extends User{
     /*
     JPA RELATIONSHIPS
      */
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
+    /*
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "child_parent",
             joinColumns = @JoinColumn(name = "parent_id"),
             inverseJoinColumns = @JoinColumn(name = "child_id")
     )
     private Set<Child> children = new HashSet<>();
+
+     */
 
 }
