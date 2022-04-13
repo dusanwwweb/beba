@@ -1,8 +1,13 @@
 package com.dusanweb.beba.model;
 
 import com.dusanweb.beba.enumeration.AllergyType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.validation.constraints.NotBlank;
@@ -68,10 +73,12 @@ public class Child {
 
     //BIDIRECTIONAL
     //ManyToOne on the child side & OnToMany on the parent side
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "section_id", nullable = false)
     private Section section;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "notebook_id", nullable = false)
     private Notebook notebook;
@@ -82,17 +89,17 @@ public class Child {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "section_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
+    //@JsonIgnore
     private Section section;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "notebook_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
+    //@JsonIgnore
     private Notebook notebook;
 
-     */
 
+ */
     /*
     @ManyToMany(mappedBy = "children")
     private Set<Parent> parents = new HashSet<>();
@@ -109,8 +116,6 @@ public class Child {
     )
     private Set<Parent> parents = new HashSet<>();
 
-  //  public Child(String firstName, String lastName, String address, String city, LocalDate dateOfBirth, Float weight, AllergyType allergyType, byte[] profilePhoto, Notebook notebook, Section section) {
-   // }
 
     //This method adds parent to the child
     public void addParent(Parent parent) {

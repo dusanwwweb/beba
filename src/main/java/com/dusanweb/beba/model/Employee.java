@@ -36,8 +36,8 @@ public class Employee extends User{
 
     //BIDIRECTIONAL
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "section_id", insertable = true, updatable = true, nullable=true)
-    //@JoinColumn(name = "section_id", nullable = false)
+    //@JoinColumn(name = "section_id", insertable = true, updatable = true, nullable=true)
+    @JoinColumn(name = "section_id", nullable = false)
     private Section section;
 
 /*

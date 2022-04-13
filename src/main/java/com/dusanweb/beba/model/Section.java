@@ -1,6 +1,9 @@
 package com.dusanweb.beba.model;
 
 import com.dusanweb.beba.enumeration.SectionType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,11 +39,12 @@ public class Section {
 
 
     //BIDIRECTIONAL
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "section")
-    private Set<Child> childSet = new HashSet<>();
+    private Set<Child> children = new HashSet<>();
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "section")
-    private Set<Employee> employeeSet = new HashSet<>();
-
+    private Set<Employee> employees = new HashSet<>();
 
 }

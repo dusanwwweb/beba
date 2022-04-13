@@ -1,6 +1,9 @@
 package com.dusanweb.beba.model;
 
 import com.dusanweb.beba.enumeration.ActivityType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -57,8 +60,6 @@ public class Notebook {
 
      //BIDIRECTIONAL
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "notebook")
-    private Set<Child> childSet = new HashSet<>();
-
-
+    private Set<Child> children = new HashSet<>();
 
 }
