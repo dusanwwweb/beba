@@ -1,6 +1,5 @@
 package com.dusanweb.beba.security.service;
 
-import com.dusanweb.beba.dto.RegisterRequest;
 import com.dusanweb.beba.model.User;
 import com.dusanweb.beba.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
