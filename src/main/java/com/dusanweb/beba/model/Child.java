@@ -1,13 +1,8 @@
 package com.dusanweb.beba.model;
 
 import com.dusanweb.beba.enumeration.AllergyType;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.validation.constraints.NotBlank;
@@ -31,6 +26,7 @@ public class Child {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OrderColumn()
     @NotBlank(message = "Name is required")
     private String firstName;
 
@@ -53,15 +49,7 @@ public class Child {
     //@Column(columnDefinition = "enum('GLUTEN','COWS_MILK','NUTS','FISH','SOYBEAN','EGG')")
     private AllergyType allergyType;
 
-    /*
-    The @Lob annotation specifies that the database should store the property as Large Object.
-    The columnDefinition in the @Column annotation defines the column type for the property.
-    Since we're going to save byte array, we're using BLOB.
-     */
-    @Lob
-    @Column(name = "profilePhoto", columnDefinition="BLOB", length=1000)
-    private byte[] profilePhoto;
-    //https://i.postimg.cc/k4nN81BW/newborn.jpg
+    private String profilePhoto;
 
     @UpdateTimestamp
     @JsonFormat(pattern="dd/MM/yyyy")
@@ -71,44 +59,13 @@ public class Child {
         JPA RELATIONSHIPS
      */
 
-    //BIDIRECTIONAL
-    //ManyToOne on the child side & OnToMany on the parent side
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "section_id", nullable = false)
-    private Section section;
-
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "notebook_id", nullable = false)
-    private Notebook notebook;
-
-
-    /*
     //UNIDIRECTIONAL
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "section_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    //@JsonIgnore
-    private Section section;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "notebook_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    //@JsonIgnore
+    @OneToOne(fetch = FetchType.EAGER)
+    //@JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
+    @JoinColumn(name = "notebook_id")
     private Notebook notebook;
 
-
- */
-    /*
-    @ManyToMany(mappedBy = "children")
-    private Set<Parent> parents = new HashSet<>();
-
-     User class has a Set of Roles but the Role class doesn’t have any references of User.
-     And by default, no cascade operations on a @ManyToMany relationship – that means updating
-     a User object won’t change the associated Role objects.
-
-     */
+    //UNIDIRECTIONAL
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "child_parent",
             joinColumns = @JoinColumn(name = "child_id"),
@@ -116,9 +73,13 @@ public class Child {
     )
     private Set<Parent> parents = new HashSet<>();
 
-
     //This method adds parent to the child
     public void addParent(Parent parent) {
         this.parents.add(parent);
+    }
+
+    //This method removes parent from the child
+    public void removeParent(Parent parent) {
+        this.parents.remove(parent);
     }
 }

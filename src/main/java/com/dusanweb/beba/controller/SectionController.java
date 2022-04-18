@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@RestController
 @Builder
+@RestController
 @RequestMapping("/api")
 public class SectionController {
 
@@ -28,8 +28,7 @@ public class SectionController {
     @GetMapping("/section")
     public ResponseEntity<List<Section>> getAllSections() {
         try {
-            List<Section> sections = new ArrayList<>();
-            sections.addAll(sectionRepository.findAll());
+            List<Section> sections = new ArrayList<>(sectionRepository.findAll());
 
             if (sections.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -41,4 +40,14 @@ public class SectionController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+/*
+    @GetMapping("/section")
+    public List<Section> getAllSectionsssss() {
+        return sectionRepository.findAll();
+    }
+
+ */
+
 }
