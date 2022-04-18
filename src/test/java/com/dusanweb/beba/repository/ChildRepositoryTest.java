@@ -27,9 +27,6 @@ public class ChildRepositoryTest {
     private ParentRepository parentRepository;
 
     @Autowired
-    private SectionRepository sectionRepository;
-
-    @Autowired
     private NotebookRepository notebookRepository;
 
 
@@ -44,15 +41,14 @@ public class ChildRepositoryTest {
 
         Child child = new Child();
         child.setFirstName("Axel");
-        child.setLastName("Drob");
+        child.setLastName("VOISIN");
         child.setAddress("119 rue Manin");
         child.setCity("Paris");
         child.setDateOfBirth(LocalDate.of(2021, 5, 9));
         child.setWeight(9.1F);
         child.setAllergyType(AllergyType.NUTS);
         //child.setProfilePhoto();
-        child.setNotebook(notebookRepository.findById(2L).get());
-        child.setSection(sectionRepository.findById(1L).get());
+        child.setNotebook(notebookRepository.findById(1L).get());
 
         child.addParent(parent);
 

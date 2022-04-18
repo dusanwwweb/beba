@@ -1,8 +1,6 @@
 package com.dusanweb.beba.controller;
 
-import com.dusanweb.beba.enumeration.AllergyType;
 import com.dusanweb.beba.model.Child;
-import com.dusanweb.beba.model.Section;
 import com.dusanweb.beba.repository.ChildRepository;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
@@ -84,36 +82,6 @@ public class ChildController {
         }
     }
 
-    /*
-    {
-    "firstName": "Axelle",
-    "lastName": "Duclos",
-    "address": "9 rue Manin",
-    "city": "Nantes",
-    "dateOfBirth": "23/05/2021",
-    "weight": 9.0,
-    "allergyType": "EGG",
-    "profilePhoto": null,
-    "updated": "12/04/2022",
-    "section": {
-        "id": 1,
-        "name": "Les petits",
-        "sectionType": "BABY",
-        "childSet": [],
-        "employeeSet": []
-    },
-    "notebook": {
-        "id": 2,
-        "activityType": null,
-        "observation": null,
-        "time": null,
-        "employees": [],
-        "childSet": []
-    },
-    "parents": []
-    }
-     */
-
     //OK
     //http://localhost:8080/api/children/7
     @PutMapping("/children/{id}")
@@ -130,7 +98,6 @@ public class ChildController {
             _child.setWeight(child.getWeight());
             _child.setAllergyType(child.getAllergyType());
             _child.setProfilePhoto(child.getProfilePhoto());
-            _child.setSection(child.getSection());
             _child.setNotebook(child.getNotebook());
             _child.setParents(child.getParents());
 
@@ -177,22 +144,6 @@ public class ChildController {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             log.trace("Get child by daye of birth: {}", dob);
-            return new ResponseEntity<>(children, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    //http://localhost:8080/api/children?section=lespetits
-    @GetMapping("/children/{section}")
-    //public ResponseEntity<List<Child>> findBySection(@PathVariable("section") Section name) {
-    public ResponseEntity<List<Child>> findBySection(@RequestParam(value = "section") Section name) {
-        try {
-            List<Child> children = childRepository.findBySection(name);
-            if (children.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-            log.trace("Get child by section name: {}", name);
             return new ResponseEntity<>(children, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

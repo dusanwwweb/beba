@@ -1,13 +1,12 @@
 package com.dusanweb.beba.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.time.LocalDate;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,7 +23,7 @@ public class User {
 //public abstract class User { //commented because can not instantiate the abstract user class (in AuthService)
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long id;
+    Long id;
 
     @NotBlank(message = "Name is required")
     private String firstName;
@@ -45,11 +44,11 @@ public class User {
     @NotBlank(message = "Password is required")
     private String password;
 
-    @UpdateTimestamp
-    @JsonFormat(pattern="dd/MM/yyyy")
-    private LocalDate updated;
+    @CreationTimestamp
+    @Column(name = "created")
+    private Date created;
 
-    private Boolean enabled;
+    //private Boolean enabled;
 
     /*
         JPA RELATIONSHIPS
@@ -59,6 +58,7 @@ public class User {
      And by default, no cascade operations on a @ManyToMany relationship – that means updating
      a User object won’t change the associated Role objects.
      */
+    //UNIDIRECTIONAL --> OWNING SIDE
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -68,5 +68,10 @@ public class User {
     //This method adds role to the user
     public void addRole(Role role) {
         this.roles.add(role);
+    }
+
+    //This method removes role from the user
+    public void removeRole(Role role) {
+        this.roles.remove(role);
     }
 }

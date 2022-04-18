@@ -17,5 +17,5 @@ public interface ChildRepository extends JpaRepository<Child, Long> {
     // there is a clear need to represent "no result," and where using null is likely to cause errors
     Optional<Child> findByFirstName(String firstName);
     List<Child> findByDateOfBirthOrderByDateOfBirthAsc(LocalDate dateOfBirth);
-    List<Child> findBySection(Section name);
+
 }

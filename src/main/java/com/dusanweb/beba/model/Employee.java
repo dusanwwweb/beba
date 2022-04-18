@@ -1,10 +1,7 @@
 package com.dusanweb.beba.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
+import lombok.*;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,31 +19,23 @@ public class Employee extends User{
     /*
     JPA RELATIONSHIPS
      */
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
+
+    //UNIDIRECTIONAL --> GL STR
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "employee_notebook",
             joinColumns = @JoinColumn(name = "employee_id"),
             inverseJoinColumns = @JoinColumn(name = "notebook_id")
     )
     private Set<Notebook> notebooks = new HashSet<>();
 
+    //This method adds parent to the child
+    public void addNotebook(Notebook notebook) {
+        this.notebooks.add(notebook);
+    }
 
-    //BIDIRECTIONAL
-    @ManyToOne(fetch = FetchType.LAZY)
-    //@JoinColumn(name = "section_id", insertable = true, updatable = true, nullable=true)
-    @JoinColumn(name = "section_id", nullable = false)
-    private Section section;
+    //This method removes parent from the child
+    public void removeNotebbok(Notebook notebook) {
+        this.notebooks.remove(notebook);
+    }
 
-/*
-    //UNIDIRECTIONAL
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "section_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
-    private Section section;
-
- */
 }
