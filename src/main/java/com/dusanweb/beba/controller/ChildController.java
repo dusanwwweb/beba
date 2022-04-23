@@ -1,6 +1,7 @@
 package com.dusanweb.beba.controller;
 
 import com.dusanweb.beba.model.Child;
+import com.dusanweb.beba.model.Notebook;
 import com.dusanweb.beba.repository.ChildRepository;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-//@CrossOrigin(origins = "http://localhost:8081")
+//@CrossOrigin(origins = "http://localhost:4200")
+// the annotation enables Cross-Origin Resource Sharing (CORS) on the server.
+//This step isn't always necessary, but since we're deploying our Angular frontend to http://localhost:4200,
+// and our Boot backend to http://localhost:8080, the browser would otherwise deny requests from one to the other.
 @Slf4j
 @RestController
 @Builder
@@ -60,20 +64,6 @@ public class ChildController {
     @PostMapping("/children")
     public ResponseEntity<Child> createChild(@RequestBody Child child) {
         try {
-            /*
-            Child _child = childRepository.save(Child.builder()
-                    .firstName(child.getFirstName())
-                    .lastName(child.getLastName())
-                    .address(child.getAddress())
-                    .city(child.getCity())
-                    .dateOfBirth(child.getDateOfBirth())
-                    .weight(child.getWeight())
-                    .allergyType(child.getAllergyType())
-                    //.profilePhoto()
-                    .notebook(child.getNotebook())
-                    .section(child.getSection())
-                    .build());
-             */
             Child _child = childRepository.save(child);
             log.trace("Create child with id : {}", child.getId());
             return new ResponseEntity<>(_child, HttpStatus.CREATED);
@@ -96,6 +86,7 @@ public class ChildController {
             _child.setCity(child.getCity());
             _child.setDateOfBirth(child.getDateOfBirth());
             _child.setWeight(child.getWeight());
+            _child.setSex(child.getSex());
             _child.setAllergyType(child.getAllergyType());
             _child.setProfilePhoto(child.getProfilePhoto());
             _child.setNotebook(child.getNotebook());
@@ -139,15 +130,90 @@ public class ChildController {
     @GetMapping("/children/find/{dob}")
     public ResponseEntity<List<Child>> findByDateOfBirth(@PathVariable("dob") String dob) {
         try {
-            List<Child> children = childRepository.findByDateOfBirthOrderByDateOfBirthAsc(LocalDate.parse(dob));
+            List<Child> children = childRepository.findByDateOfBirth(LocalDate.parse(dob));
             if (children.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            log.trace("Get child by daye of birth: {}", dob);
+            log.trace("Get child by date of birth: {}", dob);
             return new ResponseEntity<>(children, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    //http://localhost:8080/api/children/name/
+    @GetMapping("/children/name/{name}")
+    public ResponseEntity<Child> getChildByFirstName(@PathVariable("name") String firstName) {
+        Optional<Child> childData = childRepository.findByFirstName(firstName);
+        if (childData.isPresent()) {
+            log.trace("Get child by first name: {}", firstName);
+            return new ResponseEntity<>(childData.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //http://localhost:8080/api/children/weight
+    @GetMapping("/children/weight")
+    public ResponseEntity<List<Child>> findByWeight() {
+        try {
+            List<Child> children = childRepository.findAllOrderByWeightDesc();
+            if (children.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            log.trace("Get all children by weight");
+            return new ResponseEntity<>(children, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //http://localhost:8080/api/children/allergy
+    @GetMapping("/children/allergy")
+    public ResponseEntity<List<Child>> findByAllergy() {
+        try {
+            List<Child> children = childRepository.findAllOrderByAllergyTypeAsc();
+            if (children.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            log.trace("Get all children by weight");
+            return new ResponseEntity<>(children, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //http://localhost:8080/children/sex/f
+    @GetMapping("children/sex/{sex}")
+    public ResponseEntity<List<Child>> findChildBySex(@PathVariable(value = "sex") char sex) {
+        try {
+            List<Child> children = childRepository.findBySex(sex);
+            if (children.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            log.trace("Get child by sex: {}", sex);
+            return new ResponseEntity<>(children, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+/*
+    //http://localhost:8080/api/children/dateofbirth
+    @GetMapping("/children/dateofbirth")
+    public ResponseEntity<List<Child>> findByDateOfBirthAscending() {
+        try {
+            List<Child> children = childRepository.findAllOrderByDateOfBirthAsc();
+            if (children.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            log.trace("Get all children by weight");
+            return new ResponseEntity<>(children, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+ */
+
 
 }

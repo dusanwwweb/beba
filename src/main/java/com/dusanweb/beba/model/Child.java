@@ -3,6 +3,7 @@ package com.dusanweb.beba.model;
 import com.dusanweb.beba.enumeration.AllergyType;
 import com.fasterxml.jackson.annotation.*;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.validation.constraints.NotBlank;
@@ -45,6 +46,11 @@ public class Child {
 
     private Float weight;
 
+    private char sex;
+
+    //@Formula(value = "date_part('year', age(dateOfBirth))")
+    //private Integer age;
+
     @Enumerated(EnumType.STRING)
     //@Column(columnDefinition = "enum('GLUTEN','COWS_MILK','NUTS','FISH','SOYBEAN','EGG')")
     private AllergyType allergyType;
@@ -58,9 +64,8 @@ public class Child {
     /*
         JPA RELATIONSHIPS
      */
-
     //UNIDIRECTIONAL
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     //@JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
     @JoinColumn(name = "notebook_id")
     private Notebook notebook;

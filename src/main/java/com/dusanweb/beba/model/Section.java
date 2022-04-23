@@ -1,6 +1,7 @@
 package com.dusanweb.beba.model;
 
 import com.dusanweb.beba.enumeration.SectionType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Getter
@@ -39,6 +41,11 @@ public class Section {
             fetch = FetchType.LAZY,
             orphanRemoval = true
     )
+    @JoinColumn(name = "section_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    //to avoid this unnecessary serialization, you have to write this piece of code on JPA / Hibernate entity
+    // which will tell Jackson library that "Serialized JSON should not have fields hibernateLazyInitializer
+    // and handler. If you find them in object, just ignore them":
     private Set<Child> children = new HashSet<>();
 
     //UNIDIRECTIONAL
@@ -47,6 +54,7 @@ public class Section {
             fetch = FetchType.LAZY,
             orphanRemoval = true
     )
+    @JoinColumn(name = "section_id")
     private Set<Employee> employees = new HashSet<>();
 
     //This method adds child to the child

@@ -48,6 +48,9 @@ public class User {
     @Column(name = "created")
     private Date created;
 
+    //@Column(columnDefinition = "boolean default false") /
+    // /To create a default value directly in the SQL table definition we can use the @Column annotation
+    // and set its columnDefinition parameter
     //private Boolean enabled;
 
     /*

@@ -46,6 +46,7 @@ public class ChildRepositoryTest {
         child.setCity("Paris");
         child.setDateOfBirth(LocalDate.of(2021, 5, 9));
         child.setWeight(9.1F);
+        child.setSex('m');
         child.setAllergyType(AllergyType.NUTS);
         //child.setProfilePhoto();
         child.setNotebook(notebookRepository.findById(1L).get());

@@ -34,7 +34,7 @@ public class Employee extends User{
     }
 
     //This method removes parent from the child
-    public void removeNotebbok(Notebook notebook) {
+    public void removeNotebook(Notebook notebook) {
         this.notebooks.remove(notebook);
     }
 
