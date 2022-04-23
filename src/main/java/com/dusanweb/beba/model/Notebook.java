@@ -38,6 +38,9 @@ public class Notebook {
         JPA RELATIONSHIPS
      */
 
+    //@OneToOne(mappedBy = "notebook")
+    //Child child;
+
     //BIDIRECTIONAL --> GLAVNA STRANA
     @JsonManagedReference
     @OneToMany(

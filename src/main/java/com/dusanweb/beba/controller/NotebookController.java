@@ -1,5 +1,6 @@
 package com.dusanweb.beba.controller;
 
+import com.dusanweb.beba.dto.NotebookPostsResponse;
 import com.dusanweb.beba.model.Notebook;
 import com.dusanweb.beba.repository.NotebookRepository;
 import lombok.Builder;
@@ -50,4 +51,20 @@ public class NotebookController {
         }
     }
 
+    //http://localhost:8080/api/notebook/posts
+    @GetMapping("/notebook/posts")
+    public ResponseEntity<List<NotebookPostsResponse>> getAllNotebooksPosts() {
+        try {
+            List<NotebookPostsResponse> notebook = new ArrayList<>();
+            notebook.addAll(notebookRepository.getPostObservations());
+
+            if (notebook.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            log.trace("200 (OK)");
+            return new ResponseEntity<>(notebook, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
