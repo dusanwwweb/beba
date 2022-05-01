@@ -2,6 +2,8 @@ package com.dusanweb.beba.model;
 
 import com.dusanweb.beba.enumeration.ActivityType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -54,7 +56,8 @@ public class Post {
     //BIDIRECTIONAL --> PODREDJENA STRANA
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "notebook_id", nullable = false)
+    //@JoinColumn(name = "notebook_id", nullable = false)
+    @JoinColumn(name = "notebook_id")
     private Notebook notebook;
 
     @Override
@@ -67,5 +70,8 @@ public class Post {
         if (this == obj) return true;
         if (!(obj instanceof Post )) return false;
         return id != null && id.equals(((Post) obj).getId());
+    }
+
+    public void setPost(Notebook notebook) {
     }
 }
