@@ -11,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Getter
@@ -58,11 +59,11 @@ public class Notebook {
     // which are used to synchronize both sides of the bidirectional association
     public void addPost(Post post) {
         this.posts.add(post);
-        //post.setPost(this);
+        post.setPost(this);
     }
     public void removePost(Post post) {
         this.posts.remove(post);
-        //post.setPost(null);
+        post.setPost(null);
     }
 
 }
