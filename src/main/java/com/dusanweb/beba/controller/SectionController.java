@@ -5,6 +5,7 @@ import com.dusanweb.beba.model.Employee;
 import com.dusanweb.beba.model.Section;
 import com.dusanweb.beba.repository.ChildRepository;
 import com.dusanweb.beba.repository.SectionRepository;
+import com.dusanweb.beba.service.EmployeeServiceImpl;
 import com.dusanweb.beba.service.SectionServiceImpl;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,9 @@ public class SectionController {
 
     @Autowired
     private SectionServiceImpl sectionService;
+
+    @Autowired
+    private EmployeeServiceImpl employeeService;
 
     @Autowired
     private ChildRepository childRepository;
@@ -124,4 +128,21 @@ public class SectionController {
         }
     }
 
+    //http://localhost:8080/api/section/1/employee
+    @PostMapping("/section/{id}/employee")
+    public ResponseEntity<Section> addPostToSection(@PathVariable("id") String id, @RequestBody Employee employee) {
+        Optional<Section> sectionData = sectionService.findById(Long.parseLong(id));
+
+        if (sectionData.isPresent()) {
+            Section _section = sectionData.get();
+            //map the section to the employee
+            _section.addEmployee(employee);
+            //save employee to the database
+            employeeService.save(employee);
+            log.trace("Get section with ID: {}", id);
+            return new ResponseEntity<>(sectionData.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

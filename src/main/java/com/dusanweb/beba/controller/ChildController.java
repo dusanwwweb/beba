@@ -1,8 +1,11 @@
 package com.dusanweb.beba.controller;
 
 import com.dusanweb.beba.model.Child;
+import com.dusanweb.beba.model.Notebook;
 import com.dusanweb.beba.model.Parent;
 import com.dusanweb.beba.service.ChildServiceImpl;
+import com.dusanweb.beba.service.NotebookServiceImpl;
+import com.dusanweb.beba.service.ParentServiceImpl;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,12 @@ public class ChildController {
 
     @Autowired
     ChildServiceImpl childService;
+
+    @Autowired
+    NotebookServiceImpl notebookService;
+
+    @Autowired
+    ParentServiceImpl parentService;
 
     //OK
     //http://localhost:8080/api/children
@@ -224,6 +233,42 @@ public class ChildController {
         if (childData.isPresent()) {
             log.trace("Get Child with ID: {}", id);
             return new ResponseEntity<>(childData.get().getParents(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //http://localhost:8080/api/child/6/notebook
+    @PostMapping("/child/{id}/notebook")
+    public ResponseEntity<Child> addNotebookToChild(@PathVariable("id") String id, @RequestBody Notebook notebook) {
+        Optional<Child> childData = childService.findById(Long.parseLong(id));
+
+        if (childData.isPresent()) {
+            Child _child = childData.get();
+            //map the child to the notebook
+            _child.addNotebook(notebook);
+            //save notebook to the database
+            notebookService.save(notebook);
+            log.trace("Get child with ID: {}", id);
+            return new ResponseEntity<>(childData.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //http://localhost:8080/api/child/6/parent
+    @PostMapping("/child/{id}/parent")
+    public ResponseEntity<Child> addParentToChild(@PathVariable("id") String id, @RequestBody Parent parent) {
+        Optional<Child> childData = childService.findById(Long.parseLong(id));
+
+        if (childData.isPresent()) {
+            Child _child = childData.get();
+            //map the child to the parent
+            _child.addParent(parent);
+            //save parent to the database
+            parentService.save(parent);
+            log.trace("Get child with ID: {}", id);
+            return new ResponseEntity<>(childData.get(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
