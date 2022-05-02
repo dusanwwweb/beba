@@ -88,6 +88,8 @@ public class Child {
         this.parents.remove(parent);
     }
 
-    public void setSection(Section section) {
+
+    public void addNotebook(Notebook notebook) {
+        this.setNotebook(notebook);
     }
 }
