@@ -1,11 +1,13 @@
 package com.dusanweb.beba.service;
 
+import com.dusanweb.beba.dto.NotebookPostsResponse;
 import com.dusanweb.beba.model.Notebook;
 import com.dusanweb.beba.model.Post;
 import com.dusanweb.beba.repository.NotebookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,5 +41,16 @@ public class NotebookServiceImpl implements BebaService<Notebook>{
     public void deleteById(Long id) {
         notebookRepository.deleteById(id);
     }
+
+    public Collection<? extends NotebookPostsResponse> getPostObservations() {
+        return notebookRepository.getPostObservations();
+    }
+/*
+    public void removePost(Post post){
+        Notebook notebook = new Notebook();
+        notebook.removePost(post);
+    }
+
+ */
 
 }

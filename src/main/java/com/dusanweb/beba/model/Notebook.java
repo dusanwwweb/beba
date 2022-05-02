@@ -61,6 +61,7 @@ public class Notebook {
         this.posts.add(post);
         post.setPost(this);
     }
+
     public void removePost(Post post) {
         this.posts.remove(post);
         post.setPost(null);

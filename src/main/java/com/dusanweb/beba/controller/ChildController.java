@@ -1,8 +1,8 @@
 package com.dusanweb.beba.controller;
 
 import com.dusanweb.beba.model.Child;
-import com.dusanweb.beba.model.Notebook;
-import com.dusanweb.beba.repository.ChildRepository;
+import com.dusanweb.beba.model.Parent;
+import com.dusanweb.beba.service.ChildServiceImpl;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 //@CrossOrigin(origins = "http://localhost:4200")
 // the annotation enables Cross-Origin Resource Sharing (CORS) on the server.
@@ -26,7 +27,7 @@ import java.util.Optional;
 public class ChildController {
 
     @Autowired
-    ChildRepository childRepository;
+    ChildServiceImpl childService;
 
     //OK
     //http://localhost:8080/api/children
@@ -34,7 +35,7 @@ public class ChildController {
     public ResponseEntity<List<Child>> getAllChildren() {
         try {
             List<Child> children = new ArrayList<>();
-            children.addAll(childRepository.findAll());
+            children.addAll(childService.findAll());
 
             if (children.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -50,7 +51,7 @@ public class ChildController {
     //http://localhost:8080/api/children/1
     @GetMapping("/children/{id}")
     public ResponseEntity<Child> getChildById(@PathVariable("id") String id) {
-        Optional<Child> childData = childRepository.findById(Long.parseLong(id));
+        Optional<Child> childData = childService.findById(Long.parseLong(id));
         if (childData.isPresent()) {
             log.trace("Get child by id: {}", id);
             return new ResponseEntity<>(childData.get(), HttpStatus.OK);
@@ -64,7 +65,7 @@ public class ChildController {
     @PostMapping("/children")
     public ResponseEntity<Child> createChild(@RequestBody Child child) {
         try {
-            Child _child = childRepository.save(child);
+            Child _child = childService.save(child);
             log.trace("Create child with id : {}", child.getId());
             return new ResponseEntity<>(_child, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -76,7 +77,7 @@ public class ChildController {
     //http://localhost:8080/api/children/7
     @PutMapping("/children/{id}")
     public ResponseEntity<Child> updateChild(@PathVariable("id") long id, @RequestBody Child child) {
-        Optional<Child> childData = childRepository.findById(id);
+        Optional<Child> childData = childService.findById(id);
 
         if (childData.isPresent()) {
             Child _child = childData.get();
@@ -93,7 +94,7 @@ public class ChildController {
             _child.setParents(child.getParents());
 
             log.trace("Updated child with ID: {}", id);
-            return new ResponseEntity<>(childRepository.save(_child), HttpStatus.OK);
+            return new ResponseEntity<>(childService.save(_child), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -104,7 +105,7 @@ public class ChildController {
     @DeleteMapping("/children/{id}")
     public ResponseEntity<HttpStatus> deleteChild(@PathVariable("id") long id) {
         try {
-            childRepository.deleteById(id);
+            childService.deleteById(id);
             log.trace("Delete child by id: {}", id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
@@ -117,7 +118,7 @@ public class ChildController {
     @DeleteMapping("/children")
     public ResponseEntity<HttpStatus> deleteAllChildren() {
         try {
-            childRepository.deleteAll();
+            childService.deleteAll();
             log.trace("Delete all children");
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
@@ -130,7 +131,7 @@ public class ChildController {
     @GetMapping("/children/find/{dob}")
     public ResponseEntity<List<Child>> findByDateOfBirth(@PathVariable("dob") String dob) {
         try {
-            List<Child> children = childRepository.findByDateOfBirth(LocalDate.parse(dob));
+            List<Child> children = childService.findByDateOfBirth(LocalDate.parse(dob));
             if (children.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -144,7 +145,7 @@ public class ChildController {
     //http://localhost:8080/api/children/name/
     @GetMapping("/children/name/{name}")
     public ResponseEntity<Child> getChildByFirstName(@PathVariable("name") String firstName) {
-        Optional<Child> childData = childRepository.findByFirstName(firstName);
+        Optional<Child> childData = childService.findByFirstName(firstName);
         if (childData.isPresent()) {
             log.trace("Get child by first name: {}", firstName);
             return new ResponseEntity<>(childData.get(), HttpStatus.OK);
@@ -157,7 +158,7 @@ public class ChildController {
     @GetMapping("/children/weight")
     public ResponseEntity<List<Child>> findByWeight() {
         try {
-            List<Child> children = childRepository.findAllOrderByWeightDesc();
+            List<Child> children = childService.findAllOrderByWeightDesc();
             if (children.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -172,7 +173,7 @@ public class ChildController {
     @GetMapping("/children/allergy")
     public ResponseEntity<List<Child>> findByAllergy() {
         try {
-            List<Child> children = childRepository.findAllOrderByAllergyTypeAsc();
+            List<Child> children = childService.findAllOrderByAllergyTypeAsc();
             if (children.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -187,7 +188,7 @@ public class ChildController {
     @GetMapping("children/sex/{sex}")
     public ResponseEntity<List<Child>> findChildBySex(@PathVariable(value = "sex") char sex) {
         try {
-            List<Child> children = childRepository.findBySex(sex);
+            List<Child> children = childService.findBySex(sex);
             if (children.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -215,5 +216,17 @@ public class ChildController {
 
  */
 
+    //http://localhost:8080/api/child/6/parents
+    @GetMapping("/child/{id}/parents")
+    public ResponseEntity<Set<Parent>> getAllParentsFromChild(@PathVariable String id) {
+        Optional<Child> childData= childService.findById(Long.parseLong(id));
+
+        if (childData.isPresent()) {
+            log.trace("Get Child with ID: {}", id);
+            return new ResponseEntity<>(childData.get().getParents(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
 }
