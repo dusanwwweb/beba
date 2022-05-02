@@ -87,4 +87,7 @@ public class Child {
     public void removeParent(Parent parent) {
         this.parents.remove(parent);
     }
+
+    public void setSection(Section section) {
+    }
 }

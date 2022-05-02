@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Builder
@@ -112,7 +113,7 @@ public class NotebookController {
     public ResponseEntity<List<NotebookPostsResponse>> getAllNotebooksPosts() {
         try {
             List<NotebookPostsResponse> notebook = new ArrayList<>();
-            notebook.addAll(notebookRepository.getPostObservations());
+            notebook.addAll(notebookService.getPostObservations());
 
             if (notebook.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -123,24 +124,25 @@ public class NotebookController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-/*
+
     //http://localhost:8080/api/notebook/6/post
-    @PutMapping("/notebook/{id}/post")
+    @PostMapping("/notebook/{id}/post")
     public ResponseEntity<Notebook> addPostToNotebook(@PathVariable("id") String id, @RequestBody Post post) {
         Optional<Notebook> notebookData = notebookService.findById(Long.parseLong(id));
 
         if (notebookData.isPresent()) {
             Notebook _notebook = notebookData.get();
-            _notebook.addPost(post);
-
-            log.trace("Updated notebook with ID: {}", id);
-            return new ResponseEntity<>(notebookService.save(_notebook), HttpStatus.OK);
+            //map the notebook to the post
+            post.setNotebook(_notebook);
+            //save post to the database
+            postService.save(post);
+            log.trace("Get notebook with ID: {}", id);
+            return new ResponseEntity<>(notebookData.get(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
- */
     //http://localhost:8080/api/notebook/6/post/9
     @PutMapping("/notebook/{n_id}/post/{p_id}")
     public ResponseEntity<Notebook> removePostFromNotebook(@PathVariable("n_id") String n_id,
@@ -151,6 +153,7 @@ public class NotebookController {
         if (notebookData.isPresent()) {
             Notebook _notebook = notebookData.get();
             _notebook.removePost(postData);
+            //notebookService.removePost(postData);
 
             log.trace("Updated notebook with ID: {}", n_id);
             return new ResponseEntity<>(notebookService.save(_notebook), HttpStatus.OK);
@@ -158,4 +161,18 @@ public class NotebookController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    //http://localhost:8080/api/notebook/6/posts
+    @GetMapping("/notebook/{id}/posts")
+    public ResponseEntity<Set<Post>> getAllPostsFromNotebook(@PathVariable String id) {
+        Optional<Notebook> notebookData= notebookService.findById(Long.parseLong(id));
+
+        if (notebookData.isPresent()) {
+            log.trace("Get notebook with ID: {}", id);
+            return new ResponseEntity<>(notebookData.get().getPosts(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

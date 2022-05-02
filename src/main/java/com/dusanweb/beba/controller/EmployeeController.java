@@ -2,6 +2,7 @@ package com.dusanweb.beba.controller;
 
 import com.dusanweb.beba.model.Employee;
 import com.dusanweb.beba.repository.EmployeeRepository;
+import com.dusanweb.beba.service.EmployeeServiceImpl;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +20,14 @@ import java.util.List;
 public class EmployeeController {
 
     @Autowired
-    private EmployeeRepository employeeRepository;
+    private EmployeeServiceImpl employeeService;
 
     //http://localhost:8080/api/employee
     @GetMapping("/employee")
     public ResponseEntity<List<Employee>> getAllEmployees() {
         try {
             List<Employee> employee = new ArrayList<>();
-            employee.addAll(employeeRepository.findAll());
+            employee.addAll(employeeService.findAll());
 
             if (employee.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
