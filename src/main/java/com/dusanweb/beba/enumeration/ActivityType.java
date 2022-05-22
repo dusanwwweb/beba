@@ -14,7 +14,12 @@ public enum ActivityType {
         this.activity = activity;
     }
 
-    public String getActivity() {
-        return activity;
+    public String getActivity(String key) {
+        for (ActivityType item : ActivityType.values()){
+            if (item.activity.equals(key)){
+                return item.activity;
+            }
+        }
+        return null;
     }
 }
