@@ -48,7 +48,7 @@ public class ChildRepositoryTest {
         child.setWeight(9.1F);
         child.setSex('m');
         child.setAllergyType(AllergyType.NUTS);
-        //child.setProfilePhoto();
+        child.setProfilePhoto("https://i.postimg.cc/gc5Sr4b2/baby-boy.png");
         child.setNotebook(notebookRepository.findById(1L).get());
 
         child.addParent(parent);

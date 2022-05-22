@@ -34,7 +34,6 @@ public class SectionController {
     @Autowired
     private ChildRepository childRepository;
 
-    //OK
     //http://localhost:8080/api/section
     @GetMapping("/section")
     public ResponseEntity<List<Section>> getAllSections() {
@@ -52,7 +51,6 @@ public class SectionController {
         }
     }
 
-    //OK
     //http://localhost:8080/api/section/1
     @GetMapping("/section/{id}")
     public ResponseEntity<Section> getSectionById(@PathVariable("id") String id) {
@@ -91,9 +89,7 @@ public class SectionController {
 
         if (sectionData.isPresent()) {
             Section _section = sectionData.get();
-            //map the section to the child
             _section.addChild(child);
-            //save child to the database
             childRepository.save(child);
             log.trace("Get section with ID: {}", id);
             return new ResponseEntity<>(sectionData.get(), HttpStatus.OK);
@@ -130,14 +126,12 @@ public class SectionController {
 
     //http://localhost:8080/api/section/1/employee
     @PostMapping("/section/{id}/employee")
-    public ResponseEntity<Section> addPostToSection(@PathVariable("id") String id, @RequestBody Employee employee) {
+    public ResponseEntity<Section> addEmployeeToSection(@PathVariable("id") String id, @RequestBody Employee employee) {
         Optional<Section> sectionData = sectionService.findById(Long.parseLong(id));
 
         if (sectionData.isPresent()) {
             Section _section = sectionData.get();
-            //map the section to the employee
             _section.addEmployee(employee);
-            //save employee to the database
             employeeService.save(employee);
             log.trace("Get section with ID: {}", id);
             return new ResponseEntity<>(sectionData.get(), HttpStatus.OK);

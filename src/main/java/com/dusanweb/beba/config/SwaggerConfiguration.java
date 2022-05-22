@@ -45,7 +45,7 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
                 .title("Beba App API")
                 .version("1.0")
                 .description("API for Beba Application")
-                .contact(new Contact("Dusan DROBNJAKOVIC", "http://dusanweb.com", "xyz@email.com"))
+                //.contact(new Contact("Dusan DROBNJAKOVIC", "http://www.dusanweb.com", "contact@.com"))
                 .build();
     }
 }
