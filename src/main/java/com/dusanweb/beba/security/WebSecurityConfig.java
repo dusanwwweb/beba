@@ -1,13 +1,11 @@
 package com.dusanweb.beba.security;
 
 import com.dusanweb.beba.enumeration.RoleType;
-import com.dusanweb.beba.model.Role;
 import com.dusanweb.beba.security.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -19,34 +17,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+/*
+    Cross-site request forgery
 
-
-        /*
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-
-            Cross-site request forgery
-
-            CSRF attacks can occur when there are sessions and when
-            we are using cookies to authenticate session information
-            As we are using REST APIs which are stateless by definition
-            and as we're using JWT for authorisation we can safely disable this feature
-        http.csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/api/auth/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated();
-
-        //All request which does not match the pattern "/api/auth/**" should be identified
-
-    }
-
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-     */
+    CSRF attacks can occur when there are sessions and when
+    we are using cookies to authenticate session information
+    As we are using REST APIs which are stateless by definition
+    and as we're using JWT for authorisation we can safely disable this feature
+*/
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -73,42 +51,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authenticationProvider());
     }
 
+    /*
+    //RAMESH
+        @Autowired
+    protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication().withUser("alexmartin@beba.com").password("pass").roles(RoleType.ROLE_ADMIN.getRole());
+    }
+     */
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        /*
-        http.authorizeRequests()
-                //.antMatchers("/").hasAnyAuthority("USER", "ASSISTANT", "ADMIN")
-                //.antMatchers("/new").hasAnyAuthority("ADMIN", "ASSISTANT")
-                //.antMatchers("/edit/**").hasAnyAuthority("ADMIN","ASSISTANT")
-                //.antMatchers("/delete/**").hasAuthority("ADMIN")
-                .antMatchers("/").hasAnyAuthority(RoleType.ROLE_ADMIN.getRole(), RoleType.ROLE_ASSISTANT.getRole(), RoleType.ROLE_USER.getRole())
-                .antMatchers("/new").hasAnyAuthority(RoleType.ROLE_ADMIN.getRole(), RoleType.ROLE_ASSISTANT.getRole())
-                .antMatchers("/edit/**").hasAnyAuthority(RoleType.ROLE_ADMIN.getRole(), RoleType.ROLE_ASSISTANT.getRole())
-                .antMatchers("/delete/**").hasAuthority(RoleType.ROLE_ADMIN.getRole())
-                .anyRequest().authenticated()
-                .and()
-                .formLogin().permitAll()
-                .and()
-                .logout().permitAll()
-                .and()
-                .exceptionHandling().accessDeniedPage("/403")
-
-
-         */
-        /*
-        Cross-site request forgery
-
-        CSRF attacks can occur when there are sessions and when
-        we are using cookies to authenticate session information
-        As we are using REST APIs which are stateless by definition
-        and as we're using JWT for authorisation we can safely disable this feature
-
-         */
         http.csrf().disable()
                 .authorizeRequests()
-                //.antMatchers("/api/auth/**")
-                .antMatchers("/api/**")
-                .permitAll()
                 .antMatchers("/v2/api-docs",
                         "/configuration/ui",
                         "/swagger-resources/**",
@@ -116,13 +70,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/swagger-ui.html",
                         "/webjars/**")
                 .permitAll()
+                .antMatchers("/")
+                .permitAll()
+                .antMatchers("/auth/**")
+                .permitAll()
+                .antMatchers("/api/**")
+                //.hasAuthority(RoleType.ROLE_ADMIN.getRole())
+                .permitAll()
                 .anyRequest()
-                .authenticated();
-
-        //All request which does not match the pattern "/api/auth/**" should be identified
-
-        //http.authorizeRequests().antMatchers("/").permitAll(); //DISABLING SPRING SECURITY
-        ;
+                .authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/auth/login")
+                .permitAll()
+                .and()
+                .logout()
+                .permitAll()
+                .and()
+                .httpBasic();
     }
-
 }

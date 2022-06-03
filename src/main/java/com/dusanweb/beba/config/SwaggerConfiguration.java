@@ -18,6 +18,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 //http://localhost:8080/swagger-ui.html#/ --> Link to Swagger
 public class SwaggerConfiguration implements WebMvcConfigurer {
 
+    //SWAGGER DEBUG
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 

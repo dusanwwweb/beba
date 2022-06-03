@@ -29,7 +29,6 @@ public class ChildRepositoryTest {
     @Autowired
     private NotebookRepository notebookRepository;
 
-
     @Autowired
     private TestEntityManager entityManager;
 

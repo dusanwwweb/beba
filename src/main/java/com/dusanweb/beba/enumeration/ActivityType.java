@@ -4,10 +4,18 @@ public enum ActivityType {
     AWAKE("Éveil"),
     REST("Repos"),
     EAT("Répas"),
-    STOOL("Selles"),
-    CRY("Pleures"),
+    STOOL("Selle"),
+    CRY("Pleurs"),
     CHANGE("Change");
 
+/*
+    EVEIL("Awake"),
+    REPOS("Rest"),
+    REPAS("Meal"),
+    SELLE("Stool"),
+    PLEURS("Cry"),
+    CHANGE("Change");
+ */
     private final String activity;
 
     private ActivityType(String activity) {

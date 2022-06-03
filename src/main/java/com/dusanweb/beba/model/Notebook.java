@@ -38,10 +38,6 @@ public class Notebook {
     /*
         JPA RELATIONSHIPS
      */
-
-    //@OneToOne(mappedBy = "notebook")
-    //Child child;
-
     //BIDIRECTIONAL --> GLAVNA STRANA
     @JsonManagedReference
     @OneToMany(
@@ -53,7 +49,6 @@ public class Notebook {
             mappedBy = "notebook"
     )
     private Set<Post> posts = new HashSet<>();
-
 
     //The parent entity, NOTEBOOK, features two utility methods (e.g. addPost and removePost)
     // which are used to synchronize both sides of the bidirectional association

@@ -75,7 +75,6 @@ public class PostController {
             _post.setObservation(post.getObservation());
             _post.setStartTime(post.getStartTime());
             _post.setEndTime(post.getEndTime());
-            //_post.setNotebook(post.getNotebook());
 
             log.trace("Updated post with ID: {}", id);
             return new ResponseEntity<>(postService.save(_post), HttpStatus.OK);

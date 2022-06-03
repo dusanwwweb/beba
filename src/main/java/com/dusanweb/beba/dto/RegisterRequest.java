@@ -1,9 +1,12 @@
 package com.dusanweb.beba.dto;
 
+import com.dusanweb.beba.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -20,4 +23,5 @@ public class RegisterRequest {
     private String lastName;
     private String email;
     private String password;
+    private Set<Role> role;
 }
