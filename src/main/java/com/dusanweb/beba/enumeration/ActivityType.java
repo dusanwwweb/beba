@@ -1,6 +1,7 @@
 package com.dusanweb.beba.enumeration;
 
 public enum ActivityType {
+    /*
     AWAKE("Éveil"),
     REST("Repos"),
     EAT("Répas"),
@@ -8,14 +9,14 @@ public enum ActivityType {
     CRY("Pleurs"),
     CHANGE("Change");
 
-/*
+     */
     EVEIL("Awake"),
     REPOS("Rest"),
     REPAS("Meal"),
     SELLE("Stool"),
     PLEURS("Cry"),
     CHANGE("Change");
- */
+
     private final String activity;
 
     private ActivityType(String activity) {
