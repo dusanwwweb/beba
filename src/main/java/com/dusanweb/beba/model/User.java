@@ -18,7 +18,6 @@ import java.util.Set;
 @Inheritance(strategy=InheritanceType.JOINED)
 @DiscriminatorColumn(name="user_type", discriminatorType = DiscriminatorType.STRING)
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "email"))
-//The UNIQUE constraint ensures that all values in a column are different.
 public class User {
 //public abstract class User { //commented because can not instantiate the abstract user class (in AuthService)
     @Id

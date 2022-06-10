@@ -63,11 +63,6 @@ public class AuthService {
         return userRepository.findByEmailAndPassword(email, password);
     }
 
-    public Optional<User> loginUserByEmail(User user){
-        String email = user.getEmail();
-        return userRepository.findByEmail(email);
-    }
-
     public Optional<User> login(LoginRequest loginRequest){
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();

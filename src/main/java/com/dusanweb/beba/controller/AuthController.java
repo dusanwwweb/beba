@@ -38,9 +38,4 @@ public class AuthController {
         return authService.loginUser(user);
     }
 
-    @PostMapping("/login/email")
-    public Optional<User> loginUserByEmail(@RequestBody User user) {
-        return authService.loginUserByEmail(user);
-    }
-
 }

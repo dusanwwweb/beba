@@ -18,7 +18,8 @@ public class UserDetailsImpl implements UserDetails {
 
     @Autowired
     private User user;
-
+/*
+    //THIS CODE WONT WORK (get and add roles from user to an authorities)
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<Role> roles = user.getRoles();
@@ -28,6 +29,14 @@ public class UserDetailsImpl implements UserDetails {
             authorities.add(new SimpleGrantedAuthority(role.getName().getRole()));
         }
 
+        return authorities;
+    }
+
+ */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         return authorities;
     }
 
@@ -55,13 +64,6 @@ public class UserDetailsImpl implements UserDetails {
     public boolean isCredentialsNonExpired() {
         return true;
     }
-
-    /*
-    @Override
-    public boolean isEnabled() {
-        return user.getEnabled();
-    }
-     */
 
     @Override
     public boolean isEnabled() {
